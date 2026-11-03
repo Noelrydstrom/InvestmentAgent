@@ -11,3 +11,18 @@ body {
 *::after {
   box-sizing: inherit;
 }
+
+@media (min-width: 901px) {
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  app-root {
+    display: block;
+    height: 100vh;
+    overflow: hidden;
+  }
+}

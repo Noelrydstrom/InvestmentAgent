@@ -1,6 +1,8 @@
 $bg-body: #07090e;
 $bg-card: linear-gradient(180deg, rgba(24, 30, 44, 0.78) 0%, rgba(11, 15, 23, 0.96) 100%);
 $bg-chart: rgba(6, 9, 15, 0.6);
+$hud-bg: rgba(11, 15, 23, 0.96);
+$hud-border-bottom: rgba(255, 255, 255, 0.08);
 
 // Kantlinjer & Glaseffekter
 $border-glass: rgba(255, 255, 255, 0.08);
@@ -15,6 +17,14 @@ $color-cyan: #38bdf8;
 $color-up: #10b981;
 $color-down: #f43f5e;
 
+// Glows & Högdagar
+$glow-cyan: #06b6d4;
+$glow-cyan-light: #38bdf8;
+$glow-emerald: #10b981;
+$color-text-main: #f8fafc;
+$color-text-muted: #64748b;
+$color-text-dim: #94a3b8;
+
 // Typsnitt & Mått
 $font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-$font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+$font-mono: "JetBrains Mono", "SF Mono", "Space Grotesk", "JetBrains Mono", Menlo, Consolas, monospace;
