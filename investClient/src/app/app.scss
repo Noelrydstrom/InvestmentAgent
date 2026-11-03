@@ -1,0 +1,9 @@
+@use '../styles/variables' as *;
+.page {
+  background-color: $bg-body;
+  color: $text-primary;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: system-ui, sans-serif;
+}

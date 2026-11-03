@@ -1,0 +1,55 @@
+<div class="portfolio-container">
+  <header class="page-header">
+    <div class="header-badge">
+      <span class="pulse-dot"></span> AI Autonomous Portfolio
+    </div>
+    <h1>Din portfölj</h1>
+  </header>
+
+  @if (loading()) {
+    <div class="state-container">
+      <div class="skeleton-card">
+        <div class="spinner"></div>
+        <p>Hämtar marknadsdata & analyserar portfölj...</p>
+      </div>
+    </div>
+  } @else if (error()) {
+    <div class="state-container">
+      <div class="error-banner">
+        <span class="error-icon">⚠️</span>
+        <p class="error">{{ error() }}</p>
+      </div>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (h of holdings(); track h.ticker) {
+        <section class="card" [class.card-positive]="h.profitLoss >= 0" [class.card-negative]="h.profitLoss < 0">
+          <header class="card-header">
+            <div class="holding-info">
+              <h2>
+                <span class="name">{{ h.name }}</span>
+                <span class="ticker">{{ h.ticker }}</span>
+              </h2>
+              <p class="sub">
+                {{ h.shares }} aktier · köpt {{ h.purchaseDate }} för
+                {{ h.avgCostPrice | number: '1.2-2' }} {{ h.currency }}
+              </p>
+            </div>
+
+            <div class="price">
+              <strong>{{ h.currentPrice | number: '1.2-2' }} {{ h.currency }}</strong>
+              <span class="badge" [class.up]="h.profitLoss >= 0" [class.down]="h.profitLoss < 0">
+                {{ h.profitLoss >= 0 ? '+' : '' }}{{ h.profitLoss | number: '1.0-2' }} {{ h.currency }}
+                ({{ h.profitLossPct >= 0 ? '+' : '' }}{{ h.profitLossPct | number: '1.2-2' }}%)
+              </span>
+            </div>
+          </header>
+
+          <div class="chart-wrapper">
+            <app-holding-chart [holding]="h" />
+          </div>
+        </section>
+      }
+    </div>
+  }
+</div>

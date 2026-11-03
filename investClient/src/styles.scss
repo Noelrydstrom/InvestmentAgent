@@ -1,0 +1,13 @@
+/* Global styles */
+@use './styles/variables' as *;
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}

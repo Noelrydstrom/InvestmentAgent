@@ -1,0 +1,20 @@
+$bg-body: #07090e;
+$bg-card: linear-gradient(180deg, rgba(24, 30, 44, 0.78) 0%, rgba(11, 15, 23, 0.96) 100%);
+$bg-chart: rgba(6, 9, 15, 0.6);
+
+// Kantlinjer & Glaseffekter
+$border-glass: rgba(255, 255, 255, 0.08);
+$border-hover: rgba(56, 189, 248, 0.35);
+$highlight-rim: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+// Färgpalett
+$text-primary: #f8fafc;
+$text-secondary: #94a3b8;
+$text-muted: #64748b;
+$color-cyan: #38bdf8;
+$color-up: #10b981;
+$color-down: #f43f5e;
+
+// Typsnitt & Mått
+$font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+$font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
