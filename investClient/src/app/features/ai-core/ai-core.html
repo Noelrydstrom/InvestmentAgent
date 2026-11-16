@@ -53,36 +53,174 @@
     </div>
 
   </div>
+<!-- AI STATUS -->
+    <div class="ai-status-panel">
 
+      <div
+        class="status-step"
+        [class.active]="status === 'idle'"
+      >
+        <span class="step-dot"></span>
+        LISTENING
+      </div>
+
+      <div
+        class="status-step"
+        [class.active]="status === 'thinking'"
+      >
+        <span class="step-dot"></span>
+        THINKING
+      </div>
+
+      <div
+        class="status-step"
+        [class.active]="status === 'analyzing'"
+      >
+        <span class="step-dot"></span>
+        ANALYZING
+      </div>
+
+      <div
+        class="status-step"
+        [class.active]="status === 'executing'"
+      >
+        <span class="step-dot"></span>
+        EXECUTING
+      </div>
+
+    </div>
+
+    <div class="system-metrics">
+      <span>Neural Synapse: <strong>99.98%</strong></span>
+      <span>Latency: <strong>11.8ms</strong></span>
+      <span>Reasoning Engine: <strong>DeepThink-V4</strong></span>
+    </div>
+
+  </section>
   <!-- Command Interface -->
-  <form class="command-interface" (submit)="executeCommand($event)">
+  <!-- COMMAND INTERFACE -->
+  <section class="command-panel">
 
-    <input
-      type="text"
-      placeholder="Instruct Jarvis: Analyze my investment portfolio..."
-      [value]="command"
-      (input)="updateCommand($event)"
-      [disabled]="status === 'executing'"
-    />
-
-    <button
-      class="command-button"
-      type="button"
-      aria-label="Voice command"
-      disabled
+    <form
+      class="command-interface"
+      (submit)="executeCommand($event)"
     >
-      ◉
-      <span>COMMAND</span>
-    </button>
 
-    <button
-      class="execute-button"
-      type="submit"
-      [disabled]="!command.trim() || status === 'executing'"
-    >
-      EXECUTE
-    </button>
+      <span class="terminal-prefix">>_ AI:</span>
 
-  </form>
+      <input
+        type="text"
+        placeholder="Analyze my investment portfolio..."
+        [value]="command"
+        (input)="updateCommand($event)"
+        [disabled]="status === 'executing'"
+      />
 
-</section>
+      <button
+        class="command-button"
+        type="button"
+        aria-label="Voice command"
+        disabled
+      >
+        ◉
+      </button>
+
+      <button
+        class="execute-button"
+        type="submit"
+        [disabled]="!command.trim() || status === 'executing'"
+      >
+        EXECUTE ⚡
+      </button>
+
+    </form>
+
+    <div class="command-suggestions">
+
+      @for (suggestion of suggestions; track suggestion) {
+        <button
+          type="button"
+          class="suggestion"
+          (click)="useSuggestion(suggestion)"
+        >
+          {{ suggestion }}
+        </button>
+      }
+
+
+  <!-- Response STREAM -->
+  <section class="response-stream">
+
+    <header class="stream-header">
+
+      <div class="stream-title">
+        <span class="status-indicator"></span>
+        Response STREAM
+      </div>
+
+      <span class="engine-label">
+        REASONING ENGINE: DEEPTHINK-V4
+      </span>
+
+    </header>
+
+    <div class="stream-content">
+
+      <div class="jarvis-avatar">✧</div>
+
+      <div class="stream-message">
+
+        <div class="message-heading">
+          <strong>JARVIS:</strong>
+          <span>{{ statusLabel }}</span>
+        </div>
+
+        @if (status === 'idle') {
+          <p>
+            Good morning. I'm ready to analyze your investment
+            portfolio, monitor market activity and identify
+            potential investment opportunities.
+          </p>
+        }
+
+        @if (status === 'thinking') {
+          <p>
+            Processing your request. Evaluating available
+            information and preparing the analysis...
+          </p>
+        }
+
+        @if (status === 'analyzing') {
+          <p>
+            Analyzing investment data, market trends and
+            potential risks across your portfolio...
+          </p>
+        }
+
+        @if (status === 'executing') {
+          <p>
+            Executing requested operation...
+          </p>
+        }
+
+        <div class="stream-metrics">
+
+          <span class="confidence">
+            CONFIDENCE: 87%
+          </span>
+
+          <span class="risk">
+            RISK FACTOR: 1.8/10
+          </span>
+
+          <span class="recommendation">
+            SYSTEM READY
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>

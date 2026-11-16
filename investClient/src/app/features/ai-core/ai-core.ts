@@ -21,6 +21,13 @@ export class AiCoreComponent {
 
   command = '';
 
+  suggestions = [
+    'Analyze my portfolio',
+    'Find undervalued stocks',
+    'Compare current holdings',
+    'Identify biggest risks'
+  ];
+
   get statusLabel(): string {
     switch (this.status) {
       case 'thinking':
@@ -40,6 +47,10 @@ export class AiCoreComponent {
   updateCommand(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.command = input.value;
+  }
+
+  useSuggestion(suggestion: string): void {
+    this.command = suggestion;
   }
 
   executeCommand(event: Event): void {
