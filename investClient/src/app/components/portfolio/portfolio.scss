@@ -1,334 +1,390 @@
 @use '../../../styles/variables' as *;
 
-// ========================================================
-// 1. ROOT & SIDLAYOUT (Container & Header)
-// ========================================================
+:host {
+  display: block;
+  width: 100%;
+}
+
 .portfolio-container {
+  width: 100%;
   box-sizing: border-box;
+
   font-family: $font-sans;
-  background-color: $bg-body;
   color: $text-primary;
-  min-height: 100vh;
-  padding: 2.5rem 2rem;
+}
 
-  // Mobilpaddling
-  @media (max-width: 640px) {
-    padding: 1.25rem 1rem;
-  }
+// HEADER
 
-  .page-header {
-    margin-bottom: 2rem;
+.portfolio-header {
+  padding: 12px;
+  margin-bottom: 10px;
 
-    @media (max-width: 640px) {
-      margin-bottom: 1.25rem;
-    }
+  background: $bg-card;
+  border: 1px solid $border-glass;
+  border-radius: 12px;
+}
 
-    .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: $font-mono;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: $color-cyan;
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      margin-bottom: 0.6rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
+.portfolio-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
 
-      .pulse-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: $color-cyan;
-        box-shadow: 0 0 8px $color-cyan;
-        animation: pulse 2s infinite ease-in-out;
-      }
-    }
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: #ffffff;
+  font-family: $font-mono;
+  font-size: 15px;
+  font-weight: 700;
 
-      @media (max-width: 640px) {
-        font-size: 1.5rem;
-      }
-    }
+  color: $text-primary;
+  letter-spacing: 0.04em;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+
+  background: #4edea3;
+  border-radius: 50%;
+
+  box-shadow: 0 0 8px #4edea3;
+  animation: pulse 2s infinite;
+}
+
+.holding-count {
+  font-family: $font-mono;
+  font-size: 11px;
+  color: $text-muted;
+  white-space: nowrap;
+}
+
+// PORTFOLIO SUMMARY
+
+.portfolio-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.summary-value,
+.summary-change {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.summary-label {
+  font-family: $font-mono;
+  font-size: 12px;
+  color: $text-muted;
+  letter-spacing: 0.04em;
+}
+
+.summary-value strong {
+  font-family: $font-mono;
+  font-size: 18px;
+  color: #ffffff;
+  white-space: nowrap;
+
+  small {
+    font-size: 9px;
+    color: $text-muted;
   }
 }
 
-// ========================================================
-// 3. RESPONSIV GRID
-// ========================================================
+.summary-change {
+  align-items: flex-end;
+
+  strong {
+    font-family: $font-mono;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+
+.positive {
+  color: $color-up;
+}
+
+.negative {
+  color: $color-down;
+}
+
+// GRID
+
 .grid {
   display: grid;
-  // På desktop bryts korten vid 420px, på mindre skärmar anpassas de automatiskt
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 1.5rem;
-
-  @media (max-width: 900px) {
-    gap: 1.25rem;
-  }
-
-  // Mobil: 1 kolumn och full bredd
-  @media (max-width: 500px) {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+  grid-template-columns: 1fr;
+  gap: 9px;
 }
 
-// ========================================================
-// 4. KORTKOMPONENT (AURORA GLASS & TOUCH OPTIMERING)
-// ========================================================
+// STOCK CARD
+
 .card {
   position: relative;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px;
+
   background: $bg-card;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+
   border: 1px solid $border-glass;
-  border-radius: 20px;
-  padding: 1.35rem;
-  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5), $highlight-rim;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease;
+  border-radius: 12px;
+
   overflow: hidden;
 
-  // Subtil lyster över överkanten
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+
   &::before {
     content: "";
+
     position: absolute;
     top: 0;
     left: 15%;
     right: 15%;
+
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-    pointer-events: none;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
   }
 
-  // Endast lyft-effekt på enheter som stödjer hover (inte touch)
   @media (hover: hover) {
     &:hover {
-      transform: translateY(-4px);
       border-color: $border-hover;
-      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7), 
-                  0 0 20px -4px rgba(56, 189, 248, 0.18), 
-                  $highlight-rim;
-    }
-  }
-
-  // Mobilanpassad padding och radie
-  @media (max-width: 640px) {
-    border-radius: 16px;
-    padding: 1.15rem;
-  }
-
-  // Kortets header
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1.15rem;
-
-    // Mindre skärmar under 380px: bryt header vid behov så text inte trängs
-    @media (max-width: 380px) {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.75rem;
-    }
-
-    .holding-info {
-      flex: 1;
-      min-width: 0; // Förhindrar flex-overflow vid långa bolagsnamn
-
-      h2 {
-        margin: 0;
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #ffffff;
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-        letter-spacing: -0.015em;
-
-        .name {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .ticker {
-          font-family: $font-mono;
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: $text-secondary;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.09);
-          padding: 0.15rem 0.45rem;
-          border-radius: 6px;
-          flex-shrink: 0;
-        }
-      }
-
-      .sub {
-        margin: 0.35rem 0 0;
-        font-family: $font-mono;
-        font-size: 0.75rem;
-        color: $text-muted;
-        line-height: 1.35;
-        word-break: break-word;
-
-        @media (max-width: 640px) {
-          font-size: 0.72rem;
-        }
-      }
-    }
-
-    .price {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      flex-shrink: 0;
-
-      @media (max-width: 380px) {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      strong {
-        font-family: $font-mono;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #ffffff;
-        letter-spacing: -0.02em;
-
-        @media (max-width: 640px) {
-          font-size: 1.15rem;
-        }
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        font-family: $font-mono;
-        font-size: 0.78rem;
-        font-weight: 600;
-        padding: 0.2rem 0.55rem;
-        border-radius: 9999px;
-        margin-top: 0.35rem;
-        letter-spacing: -0.01em;
-        white-space: nowrap;
-
-        @media (max-width: 380px) {
-          margin-top: 0;
-        }
-
-        &.up {
-          color: $color-up;
-          background: rgba($color-up, 0.12);
-          border: 1px solid rgba($color-up, 0.28);
-        }
-
-        &.down {
-          color: $color-down;
-          background: rgba($color-down, 0.12);
-          border: 1px solid rgba($color-down, 0.28);
-        }
-      }
-    }
-  }
-
-  // Grafens behållare
-  .chart-wrapper {
-    background: $bg-chart;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    padding: 0.65rem;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
-
-    // Gör så att din underliggande chart-komponent sträcker sig 100%
-    app-holding-chart {
-      display: block;
-      width: 100%;
-      min-height: 110px;
-
-      @media (max-width: 640px) {
-        min-height: 95px;
-      }
+      background: $bg-card;
+      filter: brightness(1.15);
     }
   }
 }
 
-// ========================================================
-// 5. STATUS-LÄGEN (Laddar & Felhantering)
-// ========================================================
+// CARD HEADER
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 8px;
+}
+
+.holding-info {
+  flex: 1;
+  min-width: 0;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    margin: 0;
+
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+
+    .name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ticker {
+      padding: 2px 4px;
+
+      font-family: $font-mono;
+      font-size: 8px;
+
+      color: $text-secondary;
+
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      border-radius: 4px;
+    }
+  }
+
+  .sub {
+    margin: 5px 0 0;
+
+    font-family: $font-mono;
+    font-size: 9px;
+
+    color: $text-muted;
+  }
+}
+
+// PRICE
+
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  flex-shrink: 0;
+
+  strong {
+    font-family: $font-mono;
+    font-size: 12px;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .badge {
+    margin-top: 4px;
+
+    font-family: $font-mono;
+    font-size: 9px;
+    white-space: nowrap;
+
+    &.up {
+      color: $color-up;
+    }
+
+    &.down {
+      color: $color-down;
+    }
+  }
+}
+
+// VALUE CHANGE
+
+.holding-change {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 5px;
+  margin-top: 9px;
+
+  font-family: $font-mono;
+  font-size: 9px;
+
+  color: $text-muted;
+
+  strong {
+    white-space: nowrap;
+    font-size: 9px;
+  }
+}
+
+// CHART
+
+.chart-wrapper {
+  margin-top: 8px;
+
+  width: 100%;
+
+  background: transparent;
+  border-radius: 6px;
+
+  overflow: hidden;
+
+  app-holding-chart {
+    display: block;
+    width: 100%;
+    min-height: 65px;
+  }
+}
+
+// FOOTER
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 5px;
+
+  font-family: $font-mono;
+  font-size: 8px;
+
+  color: $text-muted;
+}
+
+// LOADING / ERROR
+
 .state-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3rem 1rem;
+  padding: 20px 8px;
+}
 
-  .skeleton-card {
-    background: $bg-card;
-    border: 1px solid $border-glass;
-    border-radius: 16px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    color: $text-secondary;
-    font-size: 0.9rem;
-    font-family: $font-mono;
+.skeleton-card {
+  width: 100%;
 
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid rgba(56, 189, 248, 0.15);
-      border-top-color: $color-cyan;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 
-  .error-banner {
-    background: rgba($color-down, 0.08);
-    border: 1px solid rgba($color-down, 0.25);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  padding: 20px;
 
-    .error-icon { font-size: 1.25rem; }
+  background: $bg-card;
+  border: 1px solid $border-glass;
+  border-radius: 12px;
 
-    .error {
-      margin: 0;
-      color: #fda4af;
-      font-family: $font-mono;
-      font-size: 0.88rem;
-    }
+  color: $text-secondary;
+  font-family: $font-mono;
+  font-size: 10px;
+
+  text-align: center;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+
+  border: 2px solid rgba(56, 189, 248, 0.15);
+  border-top-color: $color-cyan;
+
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px;
+
+  background: rgba($color-down, 0.08);
+  border: 1px solid rgba($color-down, 0.25);
+  border-radius: 10px;
+
+  .error {
+    color: $color-down;
+    font-size: 10px;
   }
 }
 
-// ========================================================
-// 6. ANIMATIONER
-// ========================================================
+// ANIMATIONS
+
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

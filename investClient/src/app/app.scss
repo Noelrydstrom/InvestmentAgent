@@ -1,10 +1,79 @@
 @use '../styles/variables' as *;
-.page {
+
+:host {
+  display: block;
   width: 100%;
-  height: 100vh;
-  min-height: 0;
-  margin: 0 auto;
-  padding: 0 0rem;
-  overflow: hidden;
+  height: 100%;
+}
+
+.command-center {
+  display: grid;
+
+  grid-template-columns:
+    minmax(220px, 0.85fr)
+    minmax(380px, 1.65fr)
+    minmax(280px, 1fr);
+
+  gap: 12px;
+
+  width: 100%;
+  height: calc(100vh - 56px);
+
+  padding: 12px;
+
   box-sizing: border-box;
+  align-items: start;
+
+  overflow: hidden;
+}
+
+.intelligence-section,
+.ai-section,
+.portfolio-section {
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(76, 215, 246, 0.2) transparent;
+}
+
+.ai-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.portfolio-section {
+  position: relative;
+}
+
+.intelligence-section {
+  position: relative;
+}
+
+// Responsive
+
+@media (max-width: 1100px) {
+  .command-center {
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+  }
+
+  .intelligence-section {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .command-center {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100vh - 56px);
+    overflow: visible;
+  }
+
+  .ai-section,
+  .portfolio-section {
+    overflow: visible;
+  }
 }

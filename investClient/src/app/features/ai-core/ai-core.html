@@ -1,0 +1,88 @@
+<section class="ai-core">
+
+  <!-- Header -->
+  <header class="ai-core__header">
+    <div class="system-label">
+      <span class="status-indicator"></span>
+      <span>HOLOGRAPHIC NEURAL MATRIX</span>
+    </div>
+
+    <div class="sync-status">
+      <span class="sync-dot"></span>
+      99.98% SYNCED
+    </div>
+  </header>
+
+  <!-- Holographic Core -->
+  <div class="ai-core__visual">
+
+    <!-- Ambient glow -->
+    <div class="core-glow"></div>
+
+    <!-- Orbital system -->
+    <div class="orbital-system">
+
+      <div class="orbit orbit--one"></div>
+      <div class="orbit orbit--two"></div>
+      <div class="orbit orbit--three"></div>
+
+      <!-- Central sphere -->
+      <div
+        class="core-sphere"
+        [class.is-thinking]="status === 'thinking'"
+        [class.is-analyzing]="status === 'analyzing'"
+        [class.is-executing]="status === 'executing'"
+      >
+
+        <div class="sphere-ring sphere-ring--outer"></div>
+        <div class="sphere-ring sphere-ring--inner"></div>
+
+        <div class="sphere-content">
+          <span class="core-name">JARVIS</span>
+          <span class="core-type">AI CORE</span>
+          <span class="core-version">v1.0.0</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="core-status">
+      <span class="status-pulse"></span>
+      {{ statusLabel }}
+    </div>
+
+  </div>
+
+  <!-- Command Interface -->
+  <form class="command-interface" (submit)="executeCommand($event)">
+
+    <input
+      type="text"
+      placeholder="Instruct Jarvis: Analyze my investment portfolio..."
+      [value]="command"
+      (input)="updateCommand($event)"
+      [disabled]="status === 'executing'"
+    />
+
+    <button
+      class="command-button"
+      type="button"
+      aria-label="Voice command"
+      disabled
+    >
+      ◉
+      <span>COMMAND</span>
+    </button>
+
+    <button
+      class="execute-button"
+      type="submit"
+      [disabled]="!command.trim() || status === 'executing'"
+    >
+      EXECUTE
+    </button>
+
+  </form>
+
+</section>

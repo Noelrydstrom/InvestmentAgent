@@ -1,4 +1,23 @@
-<main class="page">
-  <app-hud-top-bar />
-  <app-portfolio />
+<app-hud-top-bar />
+
+<main class="command-center">
+
+  <!-- LEFT: Intelligence Feed (kommer senare) -->
+  <aside class="intelligence-section">
+    <!-- Intelligence Feed component -->
+  </aside>
+
+  <!-- CENTER: JARVIS AI -->
+  <section class="ai-section">
+    <app-ai-core
+      [status]="aiStatus"
+      (commandSubmitted)="handleCommand($event)"
+    />
+  </section>
+
+  <!-- RIGHT: Investment Portfolio -->
+  <section class="portfolio-section">
+    <app-portfolio />
+  </section>
+
 </main>
