@@ -1,0 +1,103 @@
+<section class="news-feed">
+
+  <!-- HEADER -->
+  <div class="news-header">
+    <div>
+      <div class="header-title">
+        <span class="live-indicator"></span>
+        <h2>LIVE INTELLIGENCE</h2>
+      </div>
+
+      <span class="header-subtitle">GLOBAL MARKET EVENTS</span>
+    </div>
+
+    <span class="live-badge">LIVE</span>
+  </div>
+
+  <!-- MARKET OVERVIEW -->
+  <div class="market-overview">
+    <div class="overview-item">
+      <span class="overview-label">MARKET SENTIMENT</span>
+      <span class="overview-value positive">BULLISH</span>
+    </div>
+
+    <div class="overview-item">
+      <span class="overview-label">ACTIVE EVENTS</span>
+      <span class="overview-value">{{ news().length }}</span>
+    </div>
+  </div>
+
+  <!-- CATEGORY FILTERS -->
+  <div class="news-filters">
+    @for (category of categories; track category) {
+      <button
+        [class.active]="selectedCategory() === category"
+        (click)="selectCategory(category)">
+        {{ category }}
+      </button>
+    }
+  </div>
+
+  <!-- NEWS LIST -->
+  <div class="news-list">
+
+    @for (item of filteredNews; track item.id) {
+
+      <article class="news-card">
+
+        <div class="news-card-top">
+          <span class="news-category">{{ item.category }}</span>
+
+          <span
+            class="impact"
+            [class.high]="item.impact === 'HIGH'"
+            [class.medium]="item.impact === 'MEDIUM'"
+            [class.low]="item.impact === 'LOW'">
+            {{ item.impact }} IMPACT
+          </span>
+        </div>
+
+        <h3>{{ item.title }}</h3>
+
+        <p class="news-summary">
+          {{ item.summary }}
+        </p>
+
+        <div class="news-tickers">
+          @for (ticker of item.tickers; track ticker) {
+            <span>{{ ticker }}</span>
+          }
+        </div>
+
+        <div class="news-card-footer">
+          <span>{{ item.source }}</span>
+          <span>{{ item.time }}</span>
+        </div>
+
+        <div
+          class="sentiment"
+          [class.positive]="item.sentiment === 'POSITIVE'"
+          [class.negative]="item.sentiment === 'NEGATIVE'"
+          [class.neutral]="item.sentiment === 'NEUTRAL'">
+
+          {{ item.sentiment }}
+
+        </div>
+
+      </article>
+
+    } @empty {
+      <div class="empty-state">
+        NO EVENTS FOUND
+      </div>
+    }
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="news-footer">
+    <span>JARVIS INTELLIGENCE SYSTEM</span>
+    <span>MOCK DATA</span>
+  </div>
+
+</section>
