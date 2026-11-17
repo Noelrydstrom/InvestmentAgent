@@ -53,174 +53,133 @@
     </div>
 
   </div>
-<!-- AI STATUS -->
-    <div class="ai-status-panel">
+<!-- AI STATUS PANEL -->
+<div class="ai-status-panel">
+  <div class="status-step" [class.active]="status === 'idle'">
+    <span class="step-dot"></span>
+    <span>LISTENING</span>
+  </div>
 
-      <div
-        class="status-step"
-        [class.active]="status === 'idle'"
-      >
-        <span class="step-dot"></span>
-        LISTENING
-      </div>
+  <div class="status-step" [class.active]="status === 'thinking'">
+    <span class="step-dot"></span>
+    <span>THINKING</span>
+  </div>
 
-      <div
-        class="status-step"
-        [class.active]="status === 'thinking'"
-      >
-        <span class="step-dot"></span>
-        THINKING
-      </div>
+  <div class="status-step" [class.active]="status === 'analyzing'">
+    <span class="step-dot"></span>
+    <span>ANALYZING</span>
+  </div>
 
-      <div
-        class="status-step"
-        [class.active]="status === 'analyzing'"
-      >
-        <span class="step-dot"></span>
-        ANALYZING
-      </div>
+  <div class="status-step" [class.active]="status === 'executing'">
+    <span class="step-dot"></span>
+    <span>EXECUTING</span>
+  </div>
+</div>
 
-      <div
-        class="status-step"
-        [class.active]="status === 'executing'"
-      >
-        <span class="step-dot"></span>
-        EXECUTING
-      </div>
+<!-- SYSTEM METRICS -->
+<div class="system-metrics">
+  <span>Neural Synapse: <strong>99.98%</strong></span>
+  <span>Latency: <strong>11.8ms</strong></span>
+  <span>Reasoning Engine: <strong>DeepThink-V4</strong></span>
+</div>
 
-    </div>
+</section>
 
-    <div class="system-metrics">
-      <span>Neural Synapse: <strong>99.98%</strong></span>
-      <span>Latency: <strong>11.8ms</strong></span>
-      <span>Reasoning Engine: <strong>DeepThink-V4</strong></span>
-    </div>
+<!-- COMMAND PANEL -->
+<section class="command-panel">
 
-  </section>
-  <!-- Command Interface -->
-  <!-- COMMAND INTERFACE -->
-  <section class="command-panel">
+  <form class="command-interface" (submit)="executeCommand($event)">
 
-    <form
-      class="command-interface"
-      (submit)="executeCommand($event)"
+    <span class="terminal-prefix">&gt;_ AI:</span>
+
+    <input
+      type="text"
+      [value]="command"
+      (input)="updateCommand($event)"
+      placeholder="Ask or instruct JARVIS..."
+    />
+
+    <button
+      type="button"
+      class="command-button"
+      disabled
+      title="Voice input coming soon"
     >
+      🎙
+    </button>
 
-      <span class="terminal-prefix">>_ AI:</span>
+    <button
+      type="submit"
+      class="execute-button"
+      [disabled]="!command.trim()"
+    >
+      EXECUTE
+    </button>
 
-      <input
-        type="text"
-        placeholder="Analyze my investment portfolio..."
-        [value]="command"
-        (input)="updateCommand($event)"
-        [disabled]="status === 'executing'"
-      />
+  </form>
 
+  <!-- COMMAND SUGGESTIONS -->
+  <div class="command-suggestions">
+
+    @for (suggestion of suggestions; track suggestion) {
       <button
-        class="command-button"
         type="button"
-        aria-label="Voice command"
-        disabled
+        class="suggestion"
+        (click)="useSuggestion(suggestion)"
       >
-        ◉
+        {{ suggestion }}
       </button>
+    }
 
-      <button
-        class="execute-button"
-        type="submit"
-        [disabled]="!command.trim() || status === 'executing'"
-      >
-        EXECUTE ⚡
-      </button>
+  </div>
 
-    </form>
+  </section>
 
-    <div class="command-suggestions">
+<!-- RESPONSE STREAM -->
+<section class="response-stream">
 
-      @for (suggestion of suggestions; track suggestion) {
-        <button
-          type="button"
-          class="suggestion"
-          (click)="useSuggestion(suggestion)"
-        >
-          {{ suggestion }}
-        </button>
-      }
+  <div class="stream-header">
+    <div class="stream-title">
+      <span class="step-dot"></span>
+      <span>RESPONSE STREAM</span>
+    </div>
 
+    <span class="engine-label">ENGINE: DEEPTHINK-V4</span>
+  </div>
 
-  <!-- Response STREAM -->
-  <section class="response-stream">
+  <div class="stream-content">
 
-    <header class="stream-header">
+    <div class="jarvis-avatar">
+      <span>✦</span>
+    </div>
 
-      <div class="stream-title">
-        <span class="status-indicator"></span>
-        Response STREAM
+    <div class="stream-message">
+
+      <div class="message-heading">
+        <strong>JARVIS</strong>
+        <span>AI ASSISTANT</span>
       </div>
 
-      <span class="engine-label">
-        REASONING ENGINE: DEEPTHINK-V4
-      </span>
+      <p aria-live="polite">
+        {{ responseText() }}
+      </p>
 
-    </header>
+      <div class="stream-metrics">
+        <span class="confidence">
+          Confidence: {{ responseConfidence() }}
+        </span>
 
-    <div class="stream-content">
+        <span class="risk">
+          Risk: {{ responseRisk() }}
+        </span>
 
-      <div class="jarvis-avatar">✧</div>
-
-      <div class="stream-message">
-
-        <div class="message-heading">
-          <strong>JARVIS:</strong>
-          <span>{{ statusLabel }}</span>
-        </div>
-
-        @if (status === 'idle') {
-          <p>
-            Good morning. I'm ready to analyze your investment
-            portfolio, monitor market activity and identify
-            potential investment opportunities.
-          </p>
-        }
-
-        @if (status === 'thinking') {
-          <p>
-            Processing your request. Evaluating available
-            information and preparing the analysis...
-          </p>
-        }
-
-        @if (status === 'analyzing') {
-          <p>
-            Analyzing investment data, market trends and
-            potential risks across your portfolio...
-          </p>
-        }
-
-        @if (status === 'executing') {
-          <p>
-            Executing requested operation...
-          </p>
-        }
-
-        <div class="stream-metrics">
-
-          <span class="confidence">
-            CONFIDENCE: 87%
-          </span>
-
-          <span class="risk">
-            RISK FACTOR: 1.8/10
-          </span>
-
-          <span class="recommendation">
-            SYSTEM READY
-          </span>
-
-        </div>
-
+        <span class="recommendation">
+          {{ responseRecommendation() }}
+        </span>
       </div>
 
     </div>
 
-  </section>
+  </div>
+
+</section>

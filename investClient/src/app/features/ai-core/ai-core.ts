@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 
 export type AiCoreStatus =
   | 'idle'
@@ -18,6 +18,15 @@ export class AiCoreComponent {
   @Input() status: AiCoreStatus = 'idle';
 
   @Output() commandSubmitted = new EventEmitter<string>();
+
+  // JARVIS response
+  responseText = signal(
+    'System online. JARVIS is ready and waiting for your instructions.'
+  );
+
+  responseConfidence = signal('87%');
+  responseRisk = signal('Low');
+  responseRecommendation = signal('Analyzing');
 
   command = '';
 
