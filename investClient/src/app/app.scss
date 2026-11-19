@@ -15,65 +15,144 @@
     minmax(280px, 1fr);
 
   gap: 12px;
-
   width: 100%;
   height: calc(100vh - 56px);
-
   padding: 12px;
 
   box-sizing: border-box;
   align-items: start;
-
   overflow: hidden;
 }
 
-.intelligence-section,
+// CENTER COLUMN
+
+.center-column {
+  display: contents;
+}
+
 .ai-section,
+.intelligence-section,
 .portfolio-section {
   min-width: 0;
   height: 100%;
   overflow-y: auto;
+
   scrollbar-width: thin;
   scrollbar-color: rgba(76, 215, 246, 0.2) transparent;
 }
 
 .ai-section {
+  grid-column: 2;
+  grid-row: 1;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-}
-
-.portfolio-section {
-  position: relative;
 }
 
 .intelligence-section {
+  grid-column: 1;
+  grid-row: 1;
   position: relative;
 }
 
-// Responsive
+.portfolio-section {
+  grid-column: 3;
+  grid-row: 1;
+  position: relative;
+}
+
+// TABLET / SMALL DESKTOP
 
 @media (max-width: 1100px) {
   .command-center {
-    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
-  }
-
-  .intelligence-section {
-    display: none;
-  }
-}
-
-@media (max-width: 700px) {
-  .command-center {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr);
     height: auto;
     min-height: calc(100vh - 56px);
     overflow: visible;
+    align-items: start;
   }
 
-  .ai-section,
+  .center-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    grid-column: 1;
+    grid-row: 1;
+
+    min-width: 0;
+  }
+
+  .ai-section {
+    height: auto;
+    min-height: 500px;
+    overflow: hidden;
+  }
+
+  .intelligence-section {
+    height: 450px;
+    overflow: hidden;
+  }
+
   .portfolio-section {
+    grid-column: 2;
+    grid-row: 1;
+
+    height: auto;
     overflow: visible;
+  }
+}
+
+// MOBILE
+
+@media (max-width: 700px) {
+  :host {
+    height: auto;
+  }
+
+  .command-center {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    overflow: visible;
+    gap: 12px;
+  }
+
+  .center-column {
+    display: contents;
+  }
+
+  .ai-section {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 450px;
+  }
+
+  .intelligence-section {
+    grid-column: 1;
+    grid-row: 2;
+    height: 400px;
+  }
+
+  .portfolio-section {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 320px;
+  }
+}
+
+// SMALL MOBILE
+
+@media (max-width: 480px) {
+  .command-center {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  .ai-section {
+    min-height: 450px;
+  }
+
+  .intelligence-section {
+    height: 400px;
   }
 }
