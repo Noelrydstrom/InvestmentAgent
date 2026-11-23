@@ -7,8 +7,9 @@
 
     <section class="ai-section">
       <app-ai-core
-        [status]="aiStatus"
-        (commandSubmitted)="handleCommand($event)"
+      [status]="aiStatus()"
+      [response]="aiResponse()"
+      (commandSubmitted)="handleCommand($event)" 
       />
     </section>
 

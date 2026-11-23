@@ -16,12 +16,15 @@ export type AiCoreStatus =
 export class AiCoreComponent {
 
   @Input() status: AiCoreStatus = 'idle';
+  @Input() set response(value: string) {
+    this.responseText.set(value);
+  }
 
   @Output() commandSubmitted = new EventEmitter<string>();
 
-  // JARVIS response
+  // InvestAI response
   responseText = signal(
-    'System online. JARVIS is ready and waiting for your instructions.'
+    'System online. InvestAI is ready and waiting for your instructions.'
   );
 
   responseConfidence = signal('87%');
