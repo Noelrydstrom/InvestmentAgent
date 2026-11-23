@@ -12,11 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<IInvestmentDataService, InvestmentDataService>();
 
 // Ollama AI
 builder.Services.AddHttpClient<IOllamaService, OllamaService>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:11434");
+    client.Timeout = TimeSpan.FromMinutes(5);
 });
 
 builder.Services.AddCors(options =>
