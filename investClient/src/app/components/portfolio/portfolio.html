@@ -17,16 +17,29 @@
       <div class="portfolio-summary">
 
         <div class="summary-value">
-          <span class="summary-label">TOTALT PORTFÖLJVÄRDE</span>
+          <span class="summary-label">TOTALT KONTOVÄRDE</span>
 
-          <strong>832 450 <small>SEK</small></strong>
+          <strong>
+            {{ totalAccountValue() | number: '1.0-2' }}
+            <small>SEK</small>
+          </strong>
         </div>
 
-        <div class="summary-change">
-          <span class="summary-label">DAGENS AVKASTNING</span>
+        <div class="summary-value">
+          <span class="summary-label">AKTIEINNEHAV</span>
 
-          <strong class="positive">
-            +18 240 SEK
+          <strong>
+            {{ totalPortfolioValue() | number: '1.0-2' }}
+            <small>SEK</small>
+          </strong>
+        </div>
+
+        <div class="summary-value">
+          <span class="summary-label">KONTANTSALDO</span>
+
+          <strong>
+            {{ cashBalance() | number: '1.0-2' }}
+            <small>SEK</small>
           </strong>
         </div>
 
@@ -99,6 +112,17 @@
             </div>
 
           </header>
+          
+          <div class="holding-total-value">
+
+            <span>Totalt innehav:</span>
+
+            <strong>
+              {{ (h.shares * h.currentPrice) | number: '1.0-2' }}
+              {{ h.currency }}
+            </strong>
+
+          </div>
 
           <div class="holding-change">
 

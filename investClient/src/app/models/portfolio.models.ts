@@ -15,3 +15,10 @@ export interface Holding {
   profitLossPct: number;
   prices: PricePoint[];
 }
+
+export interface PortfolioOverview {
+  holdings: Holding[];
+  cashBalance: number;
+  totalPortfolioValue: number;
+  totalAccountValue: number;
+}
