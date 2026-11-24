@@ -6,14 +6,20 @@ namespace investAPI.Services;
 
 public interface IPortfolioService
 {
-    Task<List<HoldingDto>> GetPortfolioAsync(int userId);
+    Task<PortfolioOverviewDto> GetPortfolioAsync(int userId);
     Task<List<PricePointDto>?> GetPricesAsync(string ticker, DateOnly? from = null);
 }
 
 public class PortfolioService(InvestmentDbContext db) : IPortfolioService
 {
-    public async Task<List<HoldingDto>> GetPortfolioAsync(int userId)
+    public async Task<PortfolioOverviewDto> GetPortfolioAsync(int userId)
     {
+        var user = await db.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+            throw new InvalidOperationException("Användaren kunde inte hittas.");
+
         var holdings = await db.Holdings
             .Where(h => h.UserId == userId)
             .Select(h => new
@@ -33,15 +39,27 @@ public class PortfolioService(InvestmentDbContext db) : IPortfolioService
         var allPrices = await db.PriceHistories
             .Where(p => securityIds.Contains(p.SecurityId))
             .OrderBy(p => p.PriceDate)
-            .Select(p => new { p.SecurityId, p.PriceDate, p.ClosePrice })
+            .Select(p => new
+            {
+                p.SecurityId,
+                p.PriceDate,
+                p.ClosePrice
+            })
             .ToListAsync();
 
-        return holdings
+        var portfolioOverview = new PortfolioOverviewDto();
+
+        portfolioOverview.Holdings = holdings
             .OrderBy(h => h.Ticker)
             .Select(h =>
             {
-                var own = allPrices.Where(p => p.SecurityId == h.SecurityId).ToList();
-                var current = own.Count > 0 ? own[^1].ClosePrice : h.AvgCostPrice;
+                var own = allPrices
+                    .Where(p => p.SecurityId == h.SecurityId)
+                    .ToList();
+
+                var current = own.Count > 0
+                    ? own[^1].ClosePrice
+                    : h.AvgCostPrice;
 
                 var sincePurchase = own
                     .Where(p => p.PriceDate >= h.PurchaseDate)
@@ -57,22 +75,41 @@ public class PortfolioService(InvestmentDbContext db) : IPortfolioService
                     h.PurchaseDate,
                     current,
                     Math.Round((current - h.AvgCostPrice) * h.Shares, 2),
-                    Math.Round((current / h.AvgCostPrice - 1) * 100, 2),
-                    sincePurchase);
+                    h.AvgCostPrice > 0
+                        ? Math.Round((current / h.AvgCostPrice - 1) * 100, 2)
+                        : 0,
+                    sincePurchase
+                );
             })
             .ToList();
+
+        portfolioOverview.CashBalance = user.CashBalance;
+
+        portfolioOverview.TotalPortfolioValue = Math.Round(
+            portfolioOverview.Holdings.Sum(h => h.Shares * h.CurrentPrice), 2
+        );
+
+        portfolioOverview.TotalAccountValue = Math.Round(
+            portfolioOverview.TotalPortfolioValue + portfolioOverview.CashBalance, 2
+        );
+
+        return portfolioOverview;
     }
 
-    public async Task<List<PricePointDto>?> GetPricesAsync(string ticker, DateOnly? from = null)
+    public async Task<List<PricePointDto>?> GetPricesAsync(
+        string ticker,
+        DateOnly? from = null)
     {
         var securityId = await db.Securities
             .Where(s => s.Ticker == ticker)
             .Select(s => (int?)s.Id)
             .FirstOrDefaultAsync();
 
-        if (securityId is null) return null;
+        if (securityId is null)
+            return null;
 
-        var query = db.PriceHistories.Where(p => p.SecurityId == securityId);
+        var query = db.PriceHistories
+            .Where(p => p.SecurityId == securityId);
 
         if (from is not null)
         {

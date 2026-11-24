@@ -11,7 +11,7 @@ public class PortfolioController(IPortfolioService portfolio) : ControllerBase
     private const int DemoUserId = 1; // ingen inloggning än, demoanvändaren
 
     [HttpGet]
-    public async Task<ActionResult<List<HoldingDto>>> Get()
+    public async Task<ActionResult<PortfolioOverviewDto>> Get()
         => Ok(await portfolio.GetPortfolioAsync(DemoUserId));
 }
 
