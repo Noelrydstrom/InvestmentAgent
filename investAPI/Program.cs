@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IInvestmentDataService, InvestmentDataService>();
+builder.Services.AddScoped<ITradingService, TradingService>();
 
 // Ollama AI
 builder.Services.AddHttpClient<IOllamaService, OllamaService>(client =>

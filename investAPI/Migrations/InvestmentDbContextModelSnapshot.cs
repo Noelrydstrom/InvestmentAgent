@@ -152,6 +152,54 @@ namespace investAPI.Migrations
                     b.ToTable("InvestmentTransactions", (string)null);
                 });
 
+            modelBuilder.Entity("investAPI.Models.PendingTrade", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysutcdatetime())");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(12, 2)");
+
+                    b.Property<int>("SecurityId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Shares")
+                        .HasColumnType("decimal(18, 6)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(12, 2)");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SecurityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PendingTrades", (string)null);
+                });
+
             modelBuilder.Entity("investAPI.Models.PriceHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -305,6 +353,23 @@ namespace investAPI.Migrations
                 });
 
             modelBuilder.Entity("investAPI.Models.InvestmentTransaction", b =>
+                {
+                    b.HasOne("investAPI.Models.Security", "Security")
+                        .WithMany()
+                        .HasForeignKey("SecurityId")
+                        .IsRequired();
+
+                    b.HasOne("investAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.Navigation("Security");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("investAPI.Models.PendingTrade", b =>
                 {
                     b.HasOne("investAPI.Models.Security", "Security")
                         .WithMany()

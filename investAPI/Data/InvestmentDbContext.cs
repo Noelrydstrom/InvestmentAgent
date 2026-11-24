@@ -20,6 +20,7 @@ public partial class InvestmentDbContext : DbContext
 
     public virtual DbSet<Holding> Holdings { get; set; }
     public virtual DbSet<InvestmentTransaction> InvestmentTransactions { get; set; }
+    public virtual DbSet<PendingTrade> PendingTrades { get; set; }
 
     public virtual DbSet<PriceHistory> PriceHistories { get; set; }
 
@@ -85,6 +86,43 @@ public partial class InvestmentDbContext : DbContext
                 .HasColumnType("decimal(12, 2)");
 
             entity.Property(e => e.TransactionDate)
+                .HasDefaultValueSql("(sysutcdatetime())");
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(e => e.Security)
+                .WithMany()
+                .HasForeignKey(e => e.SecurityId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<PendingTrade>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.ToTable("PendingTrades");
+
+            entity.Property(e => e.TransactionType)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(e => e.Shares)
+                .HasColumnType("decimal(18, 6)");
+
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(12, 2)");
+
+            entity.Property(e => e.TotalAmount)
+                .HasColumnType("decimal(12, 2)");
+
+            entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(sysutcdatetime())");
 
             entity.HasOne(e => e.User)
