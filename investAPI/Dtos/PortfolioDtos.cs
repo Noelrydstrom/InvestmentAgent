@@ -6,7 +6,7 @@ public record HoldingDto(
     string Ticker,
     string Name,
     string Currency,
-    int Shares,
+    decimal Shares,
     decimal AvgCostPrice,
     DateOnly PurchaseDate,
     decimal CurrentPrice,

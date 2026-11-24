@@ -19,6 +19,7 @@ public partial class InvestmentDbContext : DbContext
     public virtual DbSet<AssistantLog> AssistantLogs { get; set; }
 
     public virtual DbSet<Holding> Holdings { get; set; }
+    public virtual DbSet<InvestmentTransaction> InvestmentTransactions { get; set; }
 
     public virtual DbSet<PriceHistory> PriceHistories { get; set; }
 
@@ -27,10 +28,6 @@ public partial class InvestmentDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<WatchlistItem> WatchlistItems { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=InvestmentDb;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,6 +52,8 @@ public partial class InvestmentDbContext : DbContext
 
             entity.Property(e => e.AvgCostPrice).HasColumnType("decimal(12, 2)");
 
+            entity.Property(e => e.Shares).HasColumnType("decimal(18, 6)");
+
             entity.HasOne(d => d.Security).WithMany(p => p.Holdings)
                 .HasForeignKey(d => d.SecurityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -64,6 +63,39 @@ public partial class InvestmentDbContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Holdings__UserId__68487DD7");
+        });
+
+        modelBuilder.Entity<InvestmentTransaction>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.ToTable("InvestmentTransactions");
+
+            entity.Property(e => e.TransactionType)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            entity.Property(e => e.Shares)
+                .HasColumnType("decimal(18, 6)");
+
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(12, 2)");
+
+            entity.Property(e => e.TotalAmount)
+                .HasColumnType("decimal(12, 2)");
+
+            entity.Property(e => e.TransactionDate)
+                .HasDefaultValueSql("(sysutcdatetime())");
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(e => e.Security)
+                .WithMany()
+                .HasForeignKey(e => e.SecurityId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<PriceHistory>(entity =>
@@ -102,6 +134,7 @@ public partial class InvestmentDbContext : DbContext
 
             entity.Property(e => e.DisplayName).HasMaxLength(100);
             entity.Property(e => e.Email).HasMaxLength(256);
+            entity.Property(e => e.CashBalance).HasColumnType("decimal(12, 2)").HasDefaultValue(0m);
         });
 
         modelBuilder.Entity<WatchlistItem>(entity =>

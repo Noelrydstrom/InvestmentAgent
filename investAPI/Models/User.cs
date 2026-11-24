@@ -10,6 +10,7 @@ public partial class User
     public string Email { get; set; } = null!;
 
     public string DisplayName { get; set; } = null!;
+    public decimal CashBalance { get; set; }
 
     public virtual ICollection<AssistantLog> AssistantLogs { get; set; } = new List<AssistantLog>();
 

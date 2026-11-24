@@ -11,7 +11,7 @@ public partial class Holding
 
     public int SecurityId { get; set; }
 
-    public int Shares { get; set; }
+    public decimal Shares { get; set; }
 
     public decimal AvgCostPrice { get; set; }
 
