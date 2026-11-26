@@ -164,6 +164,66 @@
         {{ responseText() }}
       </p>
 
+      @if (tradeProposal) {
+      <div class="trade-proposal">
+
+        <div class="trade-proposal__header">
+          <span class="trade-proposal__label">TRADE PROPOSAL</span>
+
+          <span
+            class="trade-badge"
+            [class.buy]="tradeProposal.transactionType === 'BUY'"
+            [class.sell]="tradeProposal.transactionType === 'SELL'"
+          >
+            {{ tradeProposal.transactionType }}
+          </span>
+        </div>
+
+        <div class="trade-proposal__company">
+          <strong>{{ tradeProposal.companyName }}</strong>
+          <span>{{ tradeProposal.ticker }}</span>
+        </div>
+
+        <div class="trade-proposal__details">
+
+          <div>
+            <span>SHARE PRICE</span>
+            <strong>{{ tradeProposal.price | number:'1.2-2' }} {{ tradeProposal.currency }}</strong>
+          </div>
+
+          <div>
+            <span>SHARES</span>
+            <strong>{{ tradeProposal.shares | number:'1.0-6' }}</strong>
+          </div>
+
+          <div>
+            <span>TOTAL AMOUNT</span>
+            <strong>{{ tradeProposal.totalAmount | number:'1.2-2' }} {{ tradeProposal.currency }}</strong>
+          </div>
+
+          <div>
+            <span>EXPIRES AT</span>
+            <strong>{{ tradeProposal.expiresAt | date:'HH:mm:ss' }}</strong>
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="confirm-trade-button"
+          [disabled]="status !== 'idle'"
+          (click)="confirmTrade()"
+        >
+          {{ status === 'executing' ? 'EXECUTING...' : 'CONFIRM ' + tradeProposal.transactionType }}
+        </button>
+
+        <p class="trade-disclaimer">
+          No transaction will occur until you confirm this proposal.
+        </p>
+
+      </div>
+    }
+
       <div class="stream-metrics">
         <span class="confidence">
           Confidence: {{ responseConfidence() }}

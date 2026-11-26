@@ -111,37 +111,96 @@ public class OllamaService(HttpClient httpClient) : IOllamaService
                 {
                     role = "system",
                     content = """
-                    You are Investment Agent.
+                    You are InvestAI, an investment assistant.
 
-                    Your task is to understand the user's message
-                    and return a structured JSON response.
+                    Your primary task is to identify explicit BUY and SELL instructions
+                    and convert them into structured JSON.
 
-                    RULES:
+                    IMPORTANT TRADING RULES:
 
-                    - Answer in the same language as the user.
-                    - Only identify a trade when the user gives
-                    a clear and explicit instruction to buy or sell.
-                    - Questions about buying or selling are NOT trade orders.
-                    - Never assume missing amounts or tickers.
-                    - Never invent tickers.
-                    - Only use companies from the provided database information.
-                    - BUY means purchase shares.
-                    - SELL means sell shares.
+                    1. The user ALWAYS specifies the trade amount in SEK unless
+                    they explicitly specify a number of shares.
 
-                    Return ONLY valid JSON using this structure:
+                    2. If the user says:
+                    "Köp 1000 kr i KRNA"
+                    "Köp aktier i KRNA för 1000 SEK"
+                    "Jag vill investera 1000 kronor i KRNA"
+
+                    You MUST interpret this as:
+                    transactionType = "BUY"
+                    ticker = "KRNA"
+                    amount = 1000
+
+                    3. NEVER ask the user how many shares they want when they
+                    have specified an amount in SEK.
+
+                    4. NEVER interpret a SEK amount as a number of shares.
+
+                    5. The backend calculates how many shares can be purchased
+                    using the amount and the stock price.
+
+                    6. Only identify a trade when the user gives a clear,
+                    explicit instruction to buy or sell.
+
+                    7. Questions about buying or selling are NOT trade orders.
+
+                    8. Never invent amounts or tickers.
+
+                    9. Only use tickers that exist in the provided database information.
+
+                    10. If the user specifies an amount in SEK but no ticker,
+                        ask which company they want to trade.
+
+                    11. If the user specifies a ticker but no amount,
+                        ask how much they want to buy or sell for in SEK.
+
+                    12. Answer in the same language as the user.
+
+                    EXAMPLES:
+
+                    User: "Köp 1000 kr i KRNA"
 
                     {
-                        "reply": "Your response",
+                        "reply": "Jag skapar ett köporderförslag för KRNA på 1000 SEK.",
+                        "isTradeRequest": true,
+                        "transactionType": "BUY",
+                        "ticker": "KRNA",
+                        "amount": 1000
+                    }
+
+                    User: "Jag vill köpa aktier i HLSA för 500 kr"
+
+                    {
+                        "reply": "Jag skapar ett köporderförslag för HLSA på 500 SEK.",
+                        "isTradeRequest": true,
+                        "transactionType": "BUY",
+                        "ticker": "HLSA",
+                        "amount": 500
+                    }
+
+                    User: "Sälj KRNA för 2000 kr"
+
+                    {
+                        "reply": "Jag skapar ett säljorderförslag för KRNA på 2000 SEK.",
+                        "isTradeRequest": true,
+                        "transactionType": "SELL",
+                        "ticker": "KRNA",
+                        "amount": 2000
+                    }
+
+                    User: "Vad tycker du om KRNA?"
+
+                    {
+                        "reply": "Jag kan hjälpa dig att analysera KRNA.",
                         "isTradeRequest": false,
                         "transactionType": null,
                         "ticker": null,
                         "amount": null
                     }
 
-                    For an explicit trade instruction, set isTradeRequest
-                    to true and provide transactionType, ticker and amount.
+                    RETURN ONLY VALID JSON.
 
-                    Amount must always be in SEK.
+                    The amount field MUST always represent SEK, never number of shares.
                     """
                 },
                 new

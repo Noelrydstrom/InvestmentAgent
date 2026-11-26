@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { TradeProposal } from '../../services/ai.service';
 
 export type AiCoreStatus =
   | 'idle'
@@ -9,20 +11,23 @@ export type AiCoreStatus =
 @Component({
   selector: 'app-ai-core',
   standalone: true,
-  imports: [],
+  imports: [DatePipe, DecimalPipe],
   templateUrl: './ai-core.html',
   styleUrl: './ai-core.scss'
 })
 export class AiCoreComponent {
 
   @Input() status: AiCoreStatus = 'idle';
+
   @Input() set response(value: string) {
     this.responseText.set(value);
   }
 
-  @Output() commandSubmitted = new EventEmitter<string>();
+  @Input() tradeProposal: TradeProposal | null = null;
 
-  // InvestAI response
+  @Output() commandSubmitted = new EventEmitter<string>();
+  @Output() tradeConfirmed = new EventEmitter<string>();
+
   responseText = signal(
     'System online. InvestAI is ready and waiting for your instructions.'
   );
@@ -57,8 +62,7 @@ export class AiCoreComponent {
   }
 
   updateCommand(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.command = input.value;
+    this.command = (event.target as HTMLInputElement).value;
   }
 
   useSuggestion(suggestion: string): void {
@@ -70,12 +74,19 @@ export class AiCoreComponent {
 
     const instruction = this.command.trim();
 
-    if (!instruction || this.status === 'executing') {
+    if (!instruction || this.status !== 'idle') {
       return;
     }
 
     this.commandSubmitted.emit(instruction);
-
     this.command = '';
+  }
+
+  confirmTrade(): void {
+    if (!this.tradeProposal || this.status !== 'idle') {
+      return;
+    }
+
+    this.tradeConfirmed.emit(this.tradeProposal.orderId);
   }
 }
